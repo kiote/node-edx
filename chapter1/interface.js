@@ -2,9 +2,9 @@
  *  Inserts "doc" into the collection "movies".
  */
 exports.insert = function(db, doc, callback) {
-  var collection = db.collection('movies');
-  collection.insertOne(doc);
-  callback(null);
+  db.collection('movies').insert(doc, function (error, result){
+  	callback(error);
+  });
 };
 
 /*
@@ -14,9 +14,8 @@ exports.insert = function(db, doc, callback) {
  *  http://mongodb.github.io/node-mongodb-native/2.0/api/Cursor.html#sort
  */
 exports.byDirector = function(db, director, callback) {
-  var collection = db.collection('movies');
-  collection.sort({'title': 1}).find({'director': director}, function(err, cursor(){
-    cursor.toArray(callback);
-  }));
-  callback(null, []);
+  var query = {"director": director};
+  db.collection('movies').find(query).sort({"title": 1}).toArray(function (error, docs) {
+  	callback(error, docs);
+  });
 };
